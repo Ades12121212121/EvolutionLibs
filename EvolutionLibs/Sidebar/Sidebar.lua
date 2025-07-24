@@ -360,7 +360,14 @@ function Sidebar.Create(parent, config)
         return collapsed
     end
     
-    return sidebar, navigation
+    local api = {}
+    api.Main = sidebar
+    api.AddItem = sidebar.AddItem
+    api.AddSeparator = sidebar.AddSeparator
+    api.SetActiveItem = sidebar.SetActiveItem
+    api.Toggle = sidebar.Toggle
+    api.IsCollapsed = sidebar.IsCollapsed
+    return api, navigation
 end
 
 -- Crear mini sidebar (solo iconos)
