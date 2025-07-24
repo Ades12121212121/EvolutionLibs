@@ -369,7 +369,7 @@ function Sidebar.Create(parent, config)
     -- Agregar referencia al Frame principal
     api.Main = sidebar
     
-    return api, navigation
+    return api
 end
 
 -- Crear mini sidebar (solo iconos)
