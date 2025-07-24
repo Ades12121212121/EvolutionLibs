@@ -6,6 +6,11 @@ local RunService = game:GetService("RunService")
 local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLibs/main/EvolutionLibs/"
 local Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))()
 local Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))()
+-- NO cargar Tab ni Toast aquí
+-- Si se necesita Tab o Toast, usar:
+-- local Tab = loadstring(game:HttpGet(BASE_URL .. "Tabs/Tab.lua"))()
+-- local Toast = loadstring(game:HttpGet(BASE_URL .. "Toast/Toast.lua"))()
+-- dentro de la función que lo requiera
 -- NO cargar Sidebar aquí
 -- Si se necesita Sidebar, usar:
 -- local Sidebar = loadstring(game:HttpGet(BASE_URL .. "Sidebar/Sidebar.lua"))()
