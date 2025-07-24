@@ -169,206 +169,194 @@ function Sidebar.Create(parent, config)
     end
     
     -- Crear API del sidebar
-    local api = {}
-    
-    -- Función AddItem
-    api.AddItem = function(text, icon, callback)
-        local item = Instance.new("Frame")
-        item.Name = "NavigationItem"
-        item.Size = UDim2.new(1, 0, 0, 45)
-        item.BackgroundColor3 = theme.Background
-        item.BackgroundTransparency = 0.5
-        item.BorderSizePixel = 0
-        item.LayoutOrder = #navigation:GetChildren()
-        item.Parent = navigation
-        
-        local itemCorner = Instance.new("UICorner")
-        itemCorner.CornerRadius = UDim.new(0, theme.BorderRadius)
-        itemCorner.Parent = item
-        
-        -- Botón clickeable
-        local button = Instance.new("TextButton")
-        button.Name = "Button"
-        button.Size = UDim2.new(1, 0, 1, 0)
-        button.BackgroundTransparency = 1
-        button.Text = ""
-        button.Parent = item
-        
-        -- Icono (opcional)
-        local iconLabel
-        if icon then
-            iconLabel = Instance.new("TextLabel")
-            iconLabel.Name = "Icon"
-            iconLabel.Size = UDim2.new(0, 30, 0, 30)
-            iconLabel.Position = UDim2.new(0, 15, 0.5, -15)
-            iconLabel.BackgroundTransparency = 1
-            iconLabel.Text = icon
-            iconLabel.TextColor3 = theme.TextSecondary
-            iconLabel.Font = Enum.Font.GothamBold
-            iconLabel.TextSize = 16
-            iconLabel.Parent = item
-        end
-        
-        -- Label del texto
-        local label = Instance.new("TextLabel")
-        label.Name = "Label"
-        label.Size = UDim2.new(1, iconLabel and -60 or -30, 1, 0)
-        label.Position = UDim2.new(0, iconLabel and 55 or 15, 0, 0)
-        label.BackgroundTransparency = 1
-        label.Text = text
-        label.TextColor3 = theme.Text
-        label.Font = Enum.Font.Gotham
-        label.TextSize = 14
-        label.TextXAlignment = Enum.TextXAlignment.Left
-        label.Parent = item
-        
-        -- Efectos de hover
-        local originalColor = item.BackgroundColor3
-        local originalTransparency = item.BackgroundTransparency
-        
-        button.MouseEnter:Connect(function()
-            local tween = game:GetService("TweenService"):Create(item,
-                TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                {
-                    BackgroundColor3 = theme.Primary,
-                    BackgroundTransparency = 0.1
-                }
-            )
-            tween:Play()
+    local api = {
+        Main = sidebar,
+        AddItem = function(text, icon, callback)
+            local item = Instance.new("Frame")
+            item.Name = "NavigationItem"
+            item.Size = UDim2.new(1, 0, 0, 45)
+            item.BackgroundColor3 = theme.Background
+            item.BackgroundTransparency = 0.5
+            item.BorderSizePixel = 0
+            item.LayoutOrder = #navigation:GetChildren()
+            item.Parent = navigation
             
-            if iconLabel then
-                local iconTween = game:GetService("TweenService"):Create(iconLabel,
-                    TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                    {TextColor3 = Color3.fromRGB(255, 255, 255)}
-                )
-                iconTween:Play()
+            local itemCorner = Instance.new("UICorner")
+            itemCorner.CornerRadius = UDim.new(0, theme.BorderRadius)
+            itemCorner.Parent = item
+            
+            -- Botón clickeable
+            local button = Instance.new("TextButton")
+            button.Name = "Button"
+            button.Size = UDim2.new(1, 0, 1, 0)
+            button.BackgroundTransparency = 1
+            button.Text = ""
+            button.Parent = item
+            
+            -- Icono (opcional)
+            local iconLabel
+            if icon then
+                iconLabel = Instance.new("TextLabel")
+                iconLabel.Name = "Icon"
+                iconLabel.Size = UDim2.new(0, 30, 0, 30)
+                iconLabel.Position = UDim2.new(0, 15, 0.5, -15)
+                iconLabel.BackgroundTransparency = 1
+                iconLabel.Text = icon
+                iconLabel.TextColor3 = theme.TextSecondary
+                iconLabel.Font = Enum.Font.GothamBold
+                iconLabel.TextSize = 16
+                iconLabel.Parent = item
             end
-        end)
-        
-        button.MouseLeave:Connect(function()
-            local tween = game:GetService("TweenService"):Create(item,
-                TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                {
-                    BackgroundColor3 = originalColor,
-                    BackgroundTransparency = originalTransparency
-                }
-            )
-            tween:Play()
             
-            if iconLabel then
-                local iconTween = game:GetService("TweenService"):Create(iconLabel,
+            -- Label del texto
+            local label = Instance.new("TextLabel")
+            label.Name = "Label"
+            label.Size = UDim2.new(1, iconLabel and -60 or -30, 1, 0)
+            label.Position = UDim2.new(0, iconLabel and 55 or 15, 0, 0)
+            label.BackgroundTransparency = 1
+            label.Text = text
+            label.TextColor3 = theme.Text
+            label.Font = Enum.Font.Gotham
+            label.TextSize = 14
+            label.TextXAlignment = Enum.TextXAlignment.Left
+            label.Parent = item
+            
+            -- Efectos de hover
+            local originalColor = item.BackgroundColor3
+            local originalTransparency = item.BackgroundTransparency
+            
+            button.MouseEnter:Connect(function()
+                local tween = game:GetService("TweenService"):Create(item,
                     TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                    {TextColor3 = theme.TextSecondary}
+                    {
+                        BackgroundColor3 = theme.Primary,
+                        BackgroundTransparency = 0.1
+                    }
                 )
-                iconTween:Play()
-            end
-        end)
-        
-        -- Efecto de click
-        button.MouseButton1Click:Connect(function()
-            -- Animación de click
-            local clickTween = game:GetService("TweenService"):Create(item,
-                TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-                {Size = UDim2.new(0.95, 0, 0, 42)}
-            )
-            clickTween:Play()
-            
-            clickTween.Completed:Connect(function()
-                local returnTween = game:GetService("TweenService"):Create(item,
-                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-                    {Size = UDim2.new(1, 0, 0, 45)}
-                )
-                returnTween:Play()
+                tween:Play()
+                
+                if iconLabel then
+                    local iconTween = game:GetService("TweenService"):Create(iconLabel,
+                        TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                        {TextColor3 = Color3.fromRGB(255, 255, 255)}
+                    )
+                    iconTween:Play()
+                end
             end)
             
-            -- Ripple effect
-            Designs.Effects.CreateRipple(button, theme.Hover, 0.4)
+            button.MouseLeave:Connect(function()
+                local tween = game:GetService("TweenService"):Create(item,
+                    TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    {
+                        BackgroundColor3 = originalColor,
+                        BackgroundTransparency = originalTransparency
+                    }
+                )
+                tween:Play()
+                
+                if iconLabel then
+                    local iconTween = game:GetService("TweenService"):Create(iconLabel,
+                        TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                        {TextColor3 = theme.TextSecondary}
+                    )
+                    iconTween:Play()
+                end
+            end)
             
-            if callback then callback() end
-        end)
-        
-        return item
-    end
-    
-    -- Función AddSeparator
-    api.AddSeparator = function(text)
-        local separator = Instance.new("Frame")
-        separator.Name = "Separator"
-        separator.Size = UDim2.new(1, 0, 0, text and 35 or 15)
-        separator.BackgroundTransparency = 1
-        separator.LayoutOrder = #navigation:GetChildren()
-        separator.Parent = navigation
-        
-        if text then
-            local separatorText = Instance.new("TextLabel")
-            separatorText.Name = "SeparatorText"
-            separatorText.Size = UDim2.new(1, -20, 1, 0)
-            separatorText.Position = UDim2.new(0, 10, 0, 0)
-            separatorText.BackgroundTransparency = 1
-            separatorText.Text = text:upper()
-            separatorText.TextColor3 = theme.TextSecondary
-            separatorText.Font = Enum.Font.GothamBold
-            separatorText.TextSize = 12
-            separatorText.TextXAlignment = Enum.TextXAlignment.Left
-            separatorText.Parent = separator
-        else
-            local line = Instance.new("Frame")
-            line.Name = "Line"
-            line.Size = UDim2.new(1, -20, 0, 1)
-            line.Position = UDim2.new(0, 10, 0.5, 0)
-            line.BackgroundColor3 = theme.Border
-            line.BorderSizePixel = 0
-            line.Parent = separator
-        end
-        
-        return separator
-    end
-    
-    -- Función SetActiveItem
-    api.SetActiveItem = function(itemText)
-        for _, child in pairs(navigation:GetChildren()) do
-            if child:IsA("Frame") and child.Name == "NavigationItem" then
-                local label = child:FindFirstChild("Label")
-                if label and label.Text == itemText then
-                    -- Activar este item
-                    child.BackgroundColor3 = theme.Primary
-                    child.BackgroundTransparency = 0.2
-                    label.TextColor3 = Color3.fromRGB(255, 255, 255)
-                    
-                    local icon = child:FindFirstChild("Icon")
-                    if icon then
-                        icon.TextColor3 = Color3.fromRGB(255, 255, 255)
-                    end
-                else
-                    -- Desactivar otros items
-                    child.BackgroundColor3 = theme.Background
-                    child.BackgroundTransparency = 0.5
-                    label.TextColor3 = theme.Text
-                    
-                    local icon = child:FindFirstChild("Icon")
-                    if icon then
-                        icon.TextColor3 = theme.TextSecondary
+            -- Efecto de click
+            button.MouseButton1Click:Connect(function()
+                -- Animación de click
+                local clickTween = game:GetService("TweenService"):Create(item,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+                    {Size = UDim2.new(0.95, 0, 0, 42)}
+                )
+                clickTween:Play()
+                
+                clickTween.Completed:Connect(function()
+                    local returnTween = game:GetService("TweenService"):Create(item,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+                        {Size = UDim2.new(1, 0, 0, 45)}
+                    )
+                    returnTween:Play()
+                end)
+                
+                -- Ripple effect
+                Designs.Effects.CreateRipple(button, theme.Hover, 0.4)
+                
+                if callback then callback() end
+            end)
+            
+            return item
+        end,
+        AddSeparator = function(text)
+            local separator = Instance.new("Frame")
+            separator.Name = "Separator"
+            separator.Size = UDim2.new(1, 0, 0, text and 35 or 15)
+            separator.BackgroundTransparency = 1
+            separator.LayoutOrder = #navigation:GetChildren()
+            separator.Parent = navigation
+            
+            if text then
+                local separatorText = Instance.new("TextLabel")
+                separatorText.Name = "SeparatorText"
+                separatorText.Size = UDim2.new(1, -20, 1, 0)
+                separatorText.Position = UDim2.new(0, 10, 0, 0)
+                separatorText.BackgroundTransparency = 1
+                separatorText.Text = text:upper()
+                separatorText.TextColor3 = theme.TextSecondary
+                separatorText.Font = Enum.Font.GothamBold
+                separatorText.TextSize = 12
+                separatorText.TextXAlignment = Enum.TextXAlignment.Left
+                separatorText.Parent = separator
+            else
+                local line = Instance.new("Frame")
+                line.Name = "Line"
+                line.Size = UDim2.new(1, -20, 0, 1)
+                line.Position = UDim2.new(0, 10, 0.5, 0)
+                line.BackgroundColor3 = theme.Border
+                line.BorderSizePixel = 0
+                line.Parent = separator
+            end
+            
+            return separator
+        end,
+        SetActiveItem = function(itemText)
+            for _, child in pairs(navigation:GetChildren()) do
+                if child:IsA("Frame") and child.Name == "NavigationItem" then
+                    local label = child:FindFirstChild("Label")
+                    if label and label.Text == itemText then
+                        -- Activar este item
+                        child.BackgroundColor3 = theme.Primary
+                        child.BackgroundTransparency = 0.2
+                        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        
+                        local icon = child:FindFirstChild("Icon")
+                        if icon then
+                            icon.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        end
+                    else
+                        -- Desactivar otros items
+                        child.BackgroundColor3 = theme.Background
+                        child.BackgroundTransparency = 0.5
+                        label.TextColor3 = theme.Text
+                        
+                        local icon = child:FindFirstChild("Icon")
+                        if icon then
+                            icon.TextColor3 = theme.TextSecondary
+                        end
                     end
                 end
             end
+        end,
+        Toggle = function()
+            if collapsible then
+                toggleCollapse()
+            end
+        end,
+        IsCollapsed = function()
+            return collapsed
         end
-    end
-    
-    -- Función Toggle
-    api.Toggle = function()
-        if collapsible then
-            toggleCollapse()
-        end
-    end
-    
-    -- Función IsCollapsed
-    api.IsCollapsed = function()
-        return collapsed
-    end
-    
-    -- Agregar referencia al Frame principal
-    api.Main = sidebar
-    
+    }
     return api
 end
 
@@ -414,151 +402,145 @@ function Sidebar.CreateMini(parent, config)
     iconPadding.Parent = iconContainer
     
     -- Crear API del mini sidebar
-    local miniApi = {}
-    
-    -- Función AddIcon
-    miniApi.AddIcon = function(icon, tooltip, callback)
-        local iconBtn = Instance.new("TextButton")
-        iconBtn.Name = "IconButton"
-        iconBtn.Size = UDim2.new(0, 40, 0, 40)
-        iconBtn.BackgroundColor3 = theme.Background
-        iconBtn.BorderSizePixel = 0
-        iconBtn.Text = icon
-        iconBtn.TextColor3 = theme.TextSecondary
-        iconBtn.Font = Enum.Font.GothamBold
-        iconBtn.TextSize = 18
-        iconBtn.LayoutOrder = #iconContainer:GetChildren()
-        iconBtn.Parent = iconContainer
-        
-        local iconCorner = Instance.new("UICorner")
-        iconCorner.CornerRadius = UDim.new(0, 20)
-        iconCorner.Parent = iconBtn
-        
-        -- Variable para el tooltip
-        local currentTooltip = nil
-        
-        -- Efectos de hover
-        iconBtn.MouseEnter:Connect(function()
-            local tween = game:GetService("TweenService"):Create(iconBtn,
-                TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                {
-                    BackgroundColor3 = theme.Primary,
-                    TextColor3 = Color3.fromRGB(255, 255, 255),
-                    Size = UDim2.new(0, 45, 0, 45)
-                }
-            )
-            tween:Play()
+    local miniApi = {
+        Main = miniSidebar,
+        AddIcon = function(icon, tooltip, callback)
+            local iconBtn = Instance.new("TextButton")
+            iconBtn.Name = "IconButton"
+            iconBtn.Size = UDim2.new(0, 40, 0, 40)
+            iconBtn.BackgroundColor3 = theme.Background
+            iconBtn.BorderSizePixel = 0
+            iconBtn.Text = icon
+            iconBtn.TextColor3 = theme.TextSecondary
+            iconBtn.Font = Enum.Font.GothamBold
+            iconBtn.TextSize = 18
+            iconBtn.LayoutOrder = #iconContainer:GetChildren()
+            iconBtn.Parent = iconContainer
             
-            -- Mostrar tooltip si existe
-            if tooltip then
-                -- Crear tooltip temporal
-                local tooltipFrame = Instance.new("Frame")
-                tooltipFrame.Name = "Tooltip"
-                tooltipFrame.Size = UDim2.new(0, #tooltip * 8 + 20, 0, 30)
-                tooltipFrame.Position = UDim2.new(1, 10, 0, iconBtn.AbsolutePosition.Y - miniSidebar.AbsolutePosition.Y - 5)
-                tooltipFrame.BackgroundColor3 = theme.Background
-                tooltipFrame.BorderSizePixel = 0
-                tooltipFrame.ZIndex = 10
-                tooltipFrame.Parent = miniSidebar
-                
-                local tooltipCorner = Instance.new("UICorner")
-                tooltipCorner.CornerRadius = UDim.new(0, 6)
-                tooltipCorner.Parent = tooltipFrame
-                
-                local tooltipText = Instance.new("TextLabel")
-                tooltipText.Size = UDim2.new(1, 0, 1, 0)
-                tooltipText.BackgroundTransparency = 1
-                tooltipText.Text = tooltip
-                tooltipText.TextColor3 = theme.Text
-                tooltipText.Font = Enum.Font.Gotham
-                tooltipText.TextSize = 12
-                tooltipText.Parent = tooltipFrame
-                
-                Designs.Effects.CreateShadow(tooltipFrame, theme, 0.4)
-                
-                -- Animar entrada del tooltip
-                tooltipFrame.BackgroundTransparency = 1
-                tooltipText.TextTransparency = 1
-                
-                local tooltipTween = game:GetService("TweenService"):Create(tooltipFrame,
-                    TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                    {BackgroundTransparency = 0}
-                )
-                local textTween = game:GetService("TweenService"):Create(tooltipText,
-                    TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                    {TextTransparency = 0}
-                )
-                
-                tooltipTween:Play()
-                textTween:Play()
-                
-                -- Guardar referencia del tooltip
-                currentTooltip = tooltipFrame
-            end
-        end)
-        
-        iconBtn.MouseLeave:Connect(function()
-            local tween = game:GetService("TweenService"):Create(iconBtn,
-                TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                {
-                    BackgroundColor3 = theme.Background,
-                    TextColor3 = theme.TextSecondary,
-                    Size = UDim2.new(0, 40, 0, 40)
-                }
-            )
-            tween:Play()
+            local iconCorner = Instance.new("UICorner")
+            iconCorner.CornerRadius = UDim.new(0, 20)
+            iconCorner.Parent = iconBtn
             
-            -- Ocultar tooltip si existe
-            if currentTooltip then
-                local tooltipFrame = currentTooltip
-                local tooltipText = tooltipFrame:FindFirstChild("TextLabel")
-                
-                local fadeOut = game:GetService("TweenService"):Create(tooltipFrame,
-                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-                    {BackgroundTransparency = 1}
+            -- Variable para el tooltip
+            local currentTooltip = nil
+            
+            -- Efectos de hover
+            iconBtn.MouseEnter:Connect(function()
+                local tween = game:GetService("TweenService"):Create(iconBtn,
+                    TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    {
+                        BackgroundColor3 = theme.Primary,
+                        TextColor3 = Color3.fromRGB(255, 255, 255),
+                        Size = UDim2.new(0, 45, 0, 45)
+                    }
                 )
-                local textFadeOut = game:GetService("TweenService"):Create(tooltipText,
-                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-                    {TextTransparency = 1}
+                tween:Play()
+                
+                -- Mostrar tooltip si existe
+                if tooltip then
+                    -- Crear tooltip temporal
+                    local tooltipFrame = Instance.new("Frame")
+                    tooltipFrame.Name = "Tooltip"
+                    tooltipFrame.Size = UDim2.new(0, #tooltip * 8 + 20, 0, 30)
+                    tooltipFrame.Position = UDim2.new(1, 10, 0, iconBtn.AbsolutePosition.Y - miniSidebar.AbsolutePosition.Y - 5)
+                    tooltipFrame.BackgroundColor3 = theme.Background
+                    tooltipFrame.BorderSizePixel = 0
+                    tooltipFrame.ZIndex = 10
+                    tooltipFrame.Parent = miniSidebar
+                    
+                    local tooltipCorner = Instance.new("UICorner")
+                    tooltipCorner.CornerRadius = UDim.new(0, 6)
+                    tooltipCorner.Parent = tooltipFrame
+                    
+                    local tooltipText = Instance.new("TextLabel")
+                    tooltipText.Size = UDim2.new(1, 0, 1, 0)
+                    tooltipText.BackgroundTransparency = 1
+                    tooltipText.Text = tooltip
+                    tooltipText.TextColor3 = theme.Text
+                    tooltipText.Font = Enum.Font.Gotham
+                    tooltipText.TextSize = 12
+                    tooltipText.Parent = tooltipFrame
+                    
+                    Designs.Effects.CreateShadow(tooltipFrame, theme, 0.4)
+                    
+                    -- Animar entrada del tooltip
+                    tooltipFrame.BackgroundTransparency = 1
+                    tooltipText.TextTransparency = 1
+                    
+                    local tooltipTween = game:GetService("TweenService"):Create(tooltipFrame,
+                        TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                        {BackgroundTransparency = 0}
+                    )
+                    local textTween = game:GetService("TweenService"):Create(tooltipText,
+                        TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                        {TextTransparency = 0}
+                    )
+                    
+                    tooltipTween:Play()
+                    textTween:Play()
+                    
+                    -- Guardar referencia del tooltip
+                    currentTooltip = tooltipFrame
+                end
+            end)
+            
+            iconBtn.MouseLeave:Connect(function()
+                local tween = game:GetService("TweenService"):Create(iconBtn,
+                    TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    {
+                        BackgroundColor3 = theme.Background,
+                        TextColor3 = theme.TextSecondary,
+                        Size = UDim2.new(0, 40, 0, 40)
+                    }
                 )
+                tween:Play()
                 
-                fadeOut:Play()
-                textFadeOut:Play()
-                
-                fadeOut.Completed:Connect(function()
-                    tooltipFrame:Destroy()
-                end)
-                
-                currentTooltip = nil
-            end
-        end)
-        
-        iconBtn.MouseButton1Click:Connect(function()
-            Designs.Effects.CreateRipple(iconBtn, theme.Hover, 0.3)
-            if callback then callback() end
-        end)
-        
-        return iconBtn
-    end
-    
-    -- Función SetActiveIcon
-    miniApi.SetActiveIcon = function(iconText)
-        for _, child in pairs(iconContainer:GetChildren()) do
-            if child:IsA("TextButton") then
-                if child.Text == iconText then
-                    child.BackgroundColor3 = theme.Primary
-                    child.TextColor3 = Color3.fromRGB(255, 255, 255)
-                else
-                    child.BackgroundColor3 = theme.Background
-                    child.TextColor3 = theme.TextSecondary
+                -- Ocultar tooltip si existe
+                if currentTooltip then
+                    local tooltipFrame = currentTooltip
+                    local tooltipText = tooltipFrame:FindFirstChild("TextLabel")
+                    
+                    local fadeOut = game:GetService("TweenService"):Create(tooltipFrame,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                        {BackgroundTransparency = 1}
+                    )
+                    local textFadeOut = game:GetService("TweenService"):Create(tooltipText,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                        {TextTransparency = 1}
+                    )
+                    
+                    fadeOut:Play()
+                    textFadeOut:Play()
+                    
+                    fadeOut.Completed:Connect(function()
+                        tooltipFrame:Destroy()
+                    end)
+                    
+                    currentTooltip = nil
+                end
+            end)
+            
+            iconBtn.MouseButton1Click:Connect(function()
+                Designs.Effects.CreateRipple(iconBtn, theme.Hover, 0.3)
+                if callback then callback() end
+            end)
+            
+            return iconBtn
+        end,
+        SetActiveIcon = function(iconText)
+            for _, child in pairs(iconContainer:GetChildren()) do
+                if child:IsA("TextButton") then
+                    if child.Text == iconText then
+                        child.BackgroundColor3 = theme.Primary
+                        child.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    else
+                        child.BackgroundColor3 = theme.Background
+                        child.TextColor3 = theme.TextSecondary
+                    end
                 end
             end
         end
-    end
-    
-    -- Agregar referencia al Frame principal
-    miniApi.Main = miniSidebar
-    
+    }
     return miniApi
 end
 
