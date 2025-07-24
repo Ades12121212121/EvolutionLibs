@@ -1,10 +1,10 @@
 -- Designs/Designs.lua - Sistema de temas, efectos y componentes
 
 local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLibs/main/EvolutionLibs/"
-local Utils
+_G.EvoLibsCache = _G.EvoLibsCache or {}
 local function getUtils()
-    if not Utils then Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))() end
-    return Utils
+    if not _G.EvoLibsCache.Utils then _G.EvoLibsCache.Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))() end
+    return _G.EvoLibsCache.Utils
 end
 
 local Designs = {}
