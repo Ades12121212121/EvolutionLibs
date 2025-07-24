@@ -4,16 +4,23 @@ local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLib
 
 local Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))()
 local Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))()
-local Sidebar = loadstring(game:HttpGet(BASE_URL .. "Sidebar/Sidebar.lua"))()
 local Toast = loadstring(game:HttpGet(BASE_URL .. "Toast/Toast.lua"))()
 local Window = loadstring(game:HttpGet(BASE_URL .. "Window/Window.lua"))()
 local Tab = loadstring(game:HttpGet(BASE_URL .. "Tabs/Tab.lua"))()
 local Elements = loadstring(game:HttpGet(BASE_URL .. "Elements/Elements.lua"))()
 
+local Sidebar
+local function getSidebar()
+    if not Sidebar then
+        Sidebar = loadstring(game:HttpGet(BASE_URL .. "Sidebar/Sidebar.lua"))()
+    end
+    return Sidebar
+end
+
 local EvolutionLibs = {
 	Utils = Utils,
 	Designs = Designs,
-	Sidebar = Sidebar,
+	Sidebar = setmetatable({}, {__index = function(_, k) return getSidebar()[k] end}),
 	Toast = Toast,
 	Window = Window,
 	Tab = Tab,
