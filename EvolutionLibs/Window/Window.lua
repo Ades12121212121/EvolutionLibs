@@ -233,7 +233,7 @@ function Window.new(config)
 	end)
 
 	-- Sidebar
-	self.Sidebar, self.SidebarTabList = getSidebar().new(self.Main, {
+	self.Sidebar = getSidebar().new(self.Main, {
 		Theme = self.Theme,
 		Title = self.Config.Title or "Menu"
 	})
