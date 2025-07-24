@@ -532,4 +532,6 @@ function Sidebar.CreateMini(parent, config)
     return miniSidebar
 end
 
+Sidebar.new = Sidebar.Create
+
 return Sidebar
