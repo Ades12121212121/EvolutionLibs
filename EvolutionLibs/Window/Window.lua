@@ -67,7 +67,7 @@ function Window.new(config)
 	-- Main Frame
 	self.Main = Instance.new("Frame")
 	self.Main.Name = "Main"
-	self.Main.Size = Utils.getResponsiveScale(Players.LocalPlayer.PlayerGui:GetTopbarInset(), self.Config.Size or {600, 400})
+	self.Main.Size = getUtils().getResponsiveScale(Players.LocalPlayer.PlayerGui:GetTopbarInset(), self.Config.Size or {600, 400})
 	self.Main.Position = UDim2.new(0.5, -(self.Main.Size.X.Offset/2), 0.5, -(self.Main.Size.Y.Offset/2))
 	self.Main.BackgroundColor3 = self.Theme.Background
 	self.Main.BackgroundTransparency = 0.05
@@ -102,7 +102,7 @@ function Window.new(config)
 	glassLayer.BackgroundTransparency = 0.8
 	glassLayer.ZIndex = 0
 	glassLayer.Parent = self.Main
-	local glassGradient = Utils.createGradient(self.Theme.Background, self.Theme.Secondary, 45)
+	local glassGradient = getUtils().createGradient(self.Theme.Background, self.Theme.Secondary, 45)
 	glassGradient.Parent = glassLayer
 
 	-- TitleBar
@@ -114,7 +114,7 @@ function Window.new(config)
 	self.TitleBar.ZIndex = 10
 	self.TitleBar.Parent = self.Main
 
-	local titleGradient = Utils.createGradient(self.Theme.Primary, self.Theme.Secondary, 45)
+	local titleGradient = getUtils().createGradient(self.Theme.Primary, self.Theme.Secondary, 45)
 	titleGradient.Parent = self.TitleBar
 
 	-- Title Label
@@ -155,7 +155,7 @@ function Window.new(config)
 		local corner = Instance.new("UICorner")
 		corner.CornerRadius = UDim.new(0, 6)
 		corner.Parent = btn
-		Utils.addHoverEffect(btn, color, Utils.lerpColor(color, Color3.fromRGB(255, 255, 255), 0.3))
+		getUtils().addHoverEffect(btn, color, getUtils().lerpColor(color, Color3.fromRGB(255, 255, 255), 0.3))
 		btn.MouseButton1Click:Connect(callback)
 		return btn
 	end
@@ -169,7 +169,7 @@ function Window.new(config)
 		if self.IsDragging then
 			local delta = input.Position - self.DragStart
 			local newPos = UDim2.new(0, self.DragOrigin.X + delta.X, 0, self.DragOrigin.Y + delta.Y)
-			self.Main.Position = Utils.clampPosition(newPos, self.ScreenGui.AbsoluteSize)
+			self.Main.Position = getUtils().clampPosition(newPos, self.ScreenGui.AbsoluteSize)
 		end
 	end
 
@@ -250,13 +250,13 @@ function Window.new(config)
 
 	-- Opening Animation
 	self.Main.Size = UDim2.new(0, 0, 0, 0)
-	Utils.tweenProperty(self.Main, "Size", Utils.getResponsiveScale(self.ScreenGui.AbsoluteSize, self.Config.Size or {600, 400}), ANIMATION_DURATION, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
-	Utils.tweenProperty(self.Main, "BackgroundTransparency", 0, ANIMATION_DURATION, Enum.EasingStyle.Quad)
+	getUtils().tweenProperty(self.Main, "Size", getUtils().getResponsiveScale(self.ScreenGui.AbsoluteSize, self.Config.Size or {600, 400}), ANIMATION_DURATION, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+	getUtils().tweenProperty(self.Main, "BackgroundTransparency", 0, ANIMATION_DURATION, Enum.EasingStyle.Quad)
 
 	-- Focus Highlight
 	self.Main:GetPropertyChangedSignal("Active"):Connect(function()
 		self.IsFocused = self.Main.Active
-		Utils.tweenProperty(shadow, "ImageTransparency", self.IsFocused and 0.7 or 0.9, 0.3)
+		getUtils().tweenProperty(shadow, "ImageTransparency", self.IsFocused and 0.7 or 0.9, 0.3)
 	end)
 
 	return self
@@ -277,22 +277,22 @@ function Window:SelectTab(tab)
 	end
 	self.CurrentTab = tab
 	tab:SetActive(true)
-	Utils.tweenProperty(self.Content, "BackgroundTransparency", 0.1, 0.3)
+	getUtils().tweenProperty(self.Content, "BackgroundTransparency", 0.1, 0.3)
 end
 
 function Window:Show()
 	self.ScreenGui.Enabled = true
-	Utils.tweenProperty(self.Main, "BackgroundTransparency", 0, ANIMATION_DURATION, Enum.EasingStyle.Quad)
+	getUtils().tweenProperty(self.Main, "BackgroundTransparency", 0, ANIMATION_DURATION, Enum.EasingStyle.Quad)
 end
 
 function Window:Hide()
-	Utils.tweenProperty(self.Main, "BackgroundTransparency", 1, ANIMATION_DURATION, Enum.EasingStyle.Quad)
+	getUtils().tweenProperty(self.Main, "BackgroundTransparency", 1, ANIMATION_DURATION, Enum.EasingStyle.Quad)
 	task.wait(ANIMATION_DURATION)
 	self.ScreenGui.Enabled = false
 end
 
 function Window:Close()
-	Utils.tweenProperty(self.Main, "Size", UDim2.new(0, 0, 0, 0), ANIMATION_DURATION, Enum.EasingStyle.Back, Enum.EasingDirection.In)
+	getUtils().tweenProperty(self.Main, "Size", UDim2.new(0, 0, 0, 0), ANIMATION_DURATION, Enum.EasingStyle.Back, Enum.EasingDirection.In)
 	task.wait(ANIMATION_DURATION)
 	self.ScreenGui:Destroy()
 end
@@ -301,16 +301,16 @@ function Window:Minimize()
 	if not self.IsMinimized then
 		self.LastPosition = self.Main.Position
 		self.LastSize = self.Main.Size
-		Utils.tweenProperty(self.Main, "Size", UDim2.new(0, 200, 0, TITLEBAR_HEIGHT), 0.3, Enum.EasingStyle.Quad)
-		Utils.tweenProperty(self.Main, "Position", UDim2.new(0, 10, 1, -TITLEBAR_HEIGHT - 10), 0.3, Enum.EasingStyle.Quad)
+		getUtils().tweenProperty(self.Main, "Size", UDim2.new(0, 200, 0, TITLEBAR_HEIGHT), 0.3, Enum.EasingStyle.Quad)
+		getUtils().tweenProperty(self.Main, "Position", UDim2.new(0, 10, 1, -TITLEBAR_HEIGHT - 10), 0.3, Enum.EasingStyle.Quad)
 		self.IsMinimized = true
 	end
 end
 
 function Window:Maximize()
 	if self.IsMinimized then
-		Utils.tweenProperty(self.Main, "Size", self.LastSize or UDim2.new(0, 600, 0, 400), 0.3, Enum.EasingStyle.Quad)
-		Utils.tweenProperty(self.Main, "Position", self.LastPosition or UDim2.new(0.5, -300, 0.5, -200), 0.3, Enum.EasingStyle.Quad)
+		getUtils().tweenProperty(self.Main, "Size", self.LastSize or UDim2.new(0, 600, 0, 400), 0.3, Enum.EasingStyle.Quad)
+		getUtils().tweenProperty(self.Main, "Position", self.LastPosition or UDim2.new(0.5, -300, 0.5, -200), 0.3, Enum.EasingStyle.Quad)
 		self.IsMinimized = false
 	end
 end
