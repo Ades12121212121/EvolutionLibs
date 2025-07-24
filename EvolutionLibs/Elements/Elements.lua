@@ -473,9 +473,7 @@ Elements.Simple = {
     -- Crear componente rápido
     Create = function(componentType, parent, config)
         config = config or {}
-        local Designs = require(script.Parent.Parent.Designs.Designs)
-        local theme = Designs.Themes[config.Theme or "Dark"]
-        
+        local theme = getDesigns().Themes[config.Theme or "Dark"]
         if componentType == "Button" then
             return Elements.Presets.ModernButton(parent, config.Text or "Button", theme, config.Style)
         elseif componentType == "Card" then
