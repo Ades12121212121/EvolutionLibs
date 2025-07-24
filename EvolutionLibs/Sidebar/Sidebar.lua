@@ -360,7 +360,7 @@ function Sidebar.Create(parent, config)
         return collapsed
     end
     
-    return sidebar
+    return sidebar, navigation
 end
 
 -- Crear mini sidebar (solo iconos)
