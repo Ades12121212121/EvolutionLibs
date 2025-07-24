@@ -581,4 +581,113 @@ function Elements.Button(parent, text, callback, config)
     return button
 end
 
+function Elements.Toggle(parent, text, default, callback, config)
+    config = config or {}
+    local designs = getDesigns()
+    if not designs then
+        warn("[EvolutionLibs] No se pudo cargar el módulo Designs para Toggle")
+        return nil
+    end
+
+    local theme = designs.Themes[config.Theme or "Dark"]
+    
+    -- Contenedor principal
+    local container = Instance.new("Frame")
+    container.Name = "Toggle"
+    container.Size = UDim2.new(1, -20, 0, config.Height or 40)
+    container.BackgroundColor3 = theme.Surface
+    container.BackgroundTransparency = 0.5
+    container.BorderSizePixel = 0
+    container.Parent = parent
+
+    -- Esquinas redondeadas para el contenedor
+    local containerCorner = Instance.new("UICorner")
+    containerCorner.CornerRadius = UDim.new(0, theme.BorderRadius or 6)
+    containerCorner.Parent = container
+
+    -- Texto del toggle
+    local label = Instance.new("TextLabel")
+    label.Name = "Label"
+    label.Size = UDim2.new(1, -60, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = text
+    label.TextColor3 = theme.Text
+    label.Font = config.Bold and Enum.Font.GothamBold or Enum.Font.Gotham
+    label.TextSize = config.TextSize or 14
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = container
+
+    -- Switch container
+    local switch = Instance.new("Frame")
+    switch.Name = "Switch"
+    switch.Size = UDim2.new(0, 40, 0, 20)
+    switch.Position = UDim2.new(1, -50, 0.5, -10)
+    switch.BackgroundColor3 = default and theme.Primary or theme.Secondary
+    switch.BorderSizePixel = 0
+    switch.Parent = container
+
+    -- Esquinas redondeadas para el switch
+    local switchCorner = Instance.new("UICorner")
+    switchCorner.CornerRadius = UDim.new(1, 0)
+    switchCorner.Parent = switch
+
+    -- Círculo del switch
+    local circle = Instance.new("Frame")
+    circle.Name = "Circle"
+    circle.Size = UDim2.new(0, 16, 0, 16)
+    circle.Position = UDim2.new(default and 1 or 0, default and -18 or 2, 0.5, -8)
+    circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    circle.BorderSizePixel = 0
+    circle.Parent = switch
+
+    -- Esquinas redondeadas para el círculo
+    local circleCorner = Instance.new("UICorner")
+    circleCorner.CornerRadius = UDim.new(1, 0)
+    circleCorner.Parent = circle
+
+    -- Estado y lógica
+    local enabled = default
+    local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+    local function updateVisuals()
+        local utils = getUtils()
+        if not utils then return end
+
+        -- Animar el círculo
+        local circleTween = game:GetService("TweenService"):Create(circle, tweenInfo, {
+            Position = UDim2.new(enabled and 1 or 0, enabled and -18 or 2, 0.5, -8)
+        })
+        circleTween:Play()
+
+        -- Animar el color del switch
+        local switchTween = game:GetService("TweenService"):Create(switch, tweenInfo, {
+            BackgroundColor3 = enabled and theme.Primary or theme.Secondary
+        })
+        switchTween:Play()
+    end
+
+    -- Botón invisible para interacción
+    local button = Instance.new("TextButton")
+    button.Name = "Button"
+    button.Size = UDim2.new(1, 0, 1, 0)
+    button.BackgroundTransparency = 1
+    button.Text = ""
+    button.Parent = container
+
+    -- Efecto hover en el contenedor
+    Elements.Utils.AddHoverEffect(container, theme, "Subtle")
+
+    -- Conectar eventos
+    button.MouseButton1Click:Connect(function()
+        enabled = not enabled
+        updateVisuals()
+        if callback then
+            callback(enabled)
+        end
+    end)
+
+    return container
+end
+
 return Elements
