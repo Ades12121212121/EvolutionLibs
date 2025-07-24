@@ -16,6 +16,7 @@ local Sidebar = {}
 -- Crear sidebar principal
 function Sidebar.Create(parent, config)
     config = config or {}
+    local Designs = getDesigns()
     local theme = config.Theme or Designs.Themes.Dark
     local width = config.Width or 250
     local collapsible = config.Collapsible ~= false
@@ -365,6 +366,7 @@ end
 -- Crear mini sidebar (solo iconos)
 function Sidebar.CreateMini(parent, config)
     config = config or {}
+    local Designs = getDesigns()
     local theme = config.Theme or Designs.Themes.Dark
     local width = config.Width or 60
     
