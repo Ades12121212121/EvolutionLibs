@@ -4,26 +4,30 @@ local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLib
 
 local Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))()
 local Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))()
-local Toast = loadstring(game:HttpGet(BASE_URL .. "Toast/Toast.lua"))()
 local Window = loadstring(game:HttpGet(BASE_URL .. "Window/Window.lua"))()
-local Tab = loadstring(game:HttpGet(BASE_URL .. "Tabs/Tab.lua"))()
 local Elements = loadstring(game:HttpGet(BASE_URL .. "Elements/Elements.lua"))()
 
-local Sidebar
+local Sidebar, Toast, Tab
 local function getSidebar()
-    if not Sidebar then
-        Sidebar = loadstring(game:HttpGet(BASE_URL .. "Sidebar/Sidebar.lua"))()
-    end
+    if not Sidebar then Sidebar = loadstring(game:HttpGet(BASE_URL .. "Sidebar/Sidebar.lua"))() end
     return Sidebar
+end
+local function getToast()
+    if not Toast then Toast = loadstring(game:HttpGet(BASE_URL .. "Toast/Toast.lua"))() end
+    return Toast
+end
+local function getTab()
+    if not Tab then Tab = loadstring(game:HttpGet(BASE_URL .. "Tabs/Tab.lua"))() end
+    return Tab
 end
 
 local EvolutionLibs = {
 	Utils = Utils,
 	Designs = Designs,
 	Sidebar = setmetatable({}, {__index = function(_, k) return getSidebar()[k] end}),
-	Toast = Toast,
+	Toast = setmetatable({}, {__index = function(_, k) return getToast()[k] end}),
 	Window = Window,
-	Tab = Tab,
+	Tab = setmetatable({}, {__index = function(_, k) return getTab()[k] end}),
 	Elements = Elements,
 
 	-- API simplificada y directa
@@ -45,7 +49,7 @@ local EvolutionLibs = {
 		return Window.new(config)
 	end,
 	CreateTab = function(window, name, icon)
-		return Tab.new(window, name, icon)
+		return getTab().new(window, name, icon)
 	end,
 	CreateLabel = function(parent, text, config)
 		return Elements.Label(parent, text, config)
@@ -69,7 +73,7 @@ local EvolutionLibs = {
 		return Elements.ColorPicker(parent, text, default, callback, config)
 	end,
 	Notify = function(text, type, duration, parent)
-		return Toast.show(text, type, duration, parent)
+		return getToast().show(text, type, duration, parent)
 	end,
 }
 
