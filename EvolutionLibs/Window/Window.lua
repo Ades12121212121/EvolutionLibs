@@ -233,7 +233,10 @@ function Window.new(config)
 	end)
 
 	-- Sidebar
-	self.Sidebar, self.SidebarTabList = getSidebar().new(self, self.Theme)
+	self.Sidebar, self.SidebarTabList = getSidebar().new(self.Main, {
+		Theme = self.Theme,
+		Title = self.Config.Title or "Menu"
+	})
 
 	-- Content Area
 	self.Content = Instance.new("Frame")
