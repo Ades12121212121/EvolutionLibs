@@ -486,4 +486,20 @@ Elements.Simple = {
     end
 }
 
+function Elements.Label(parent, text, config)
+    config = config or {}
+    local theme = getDesigns().Themes[config.Theme or "Dark"]
+    local label = Instance.new("TextLabel")
+    label.Name = "Label"
+    label.Size = UDim2.new(1, -20, 0, config.TextSize or 20)
+    label.BackgroundTransparency = 1
+    label.Text = text
+    label.TextColor3 = config.Color or theme.Text
+    label.Font = config.Bold and Enum.Font.GothamBold or Enum.Font.Gotham
+    label.TextSize = config.TextSize or 16
+    label.TextXAlignment = config.Alignment == "Center" and Enum.TextXAlignment.Center or Enum.TextXAlignment.Left
+    label.Parent = parent
+    return label
+end
+
 return Elements
