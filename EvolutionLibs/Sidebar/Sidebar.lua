@@ -360,14 +360,14 @@ function Sidebar.Create(parent, config)
         return collapsed
     end
     
-    -- (1) Asegura que Sidebar.Create retorna la API, nunca el Frame directo
-    local api = {}
-    api.Main = sidebar
-    api.AddItem = sidebar.AddItem
-    api.AddSeparator = sidebar.AddSeparator
-    api.SetActiveItem = sidebar.SetActiveItem
-    api.Toggle = sidebar.Toggle
-    api.IsCollapsed = sidebar.IsCollapsed
+    local api = {
+        Main = sidebar,
+        AddItem = sidebar.AddItem,
+        AddSeparator = sidebar.AddSeparator,
+        SetActiveItem = sidebar.SetActiveItem,
+        Toggle = sidebar.Toggle,
+        IsCollapsed = sidebar.IsCollapsed
+    }
     return api, navigation
 end
 
