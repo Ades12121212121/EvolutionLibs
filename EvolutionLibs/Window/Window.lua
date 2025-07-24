@@ -67,7 +67,9 @@ function Window.new(config)
 	-- Main Frame
 	self.Main = Instance.new("Frame")
 	self.Main.Name = "Main"
-	self.Main.Size = getUtils().getResponsiveScale(Players.LocalPlayer.PlayerGui:GetTopbarInset(), self.Config.Size or {600, 400})
+	-- Solución: usa la resolución de pantalla o un valor fijo
+	local screenSize = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(1920, 1080)
+	self.Main.Size = getUtils().getResponsiveScale(screenSize, self.Config.Size or {600, 400})
 	self.Main.Position = UDim2.new(0.5, -(self.Main.Size.X.Offset/2), 0.5, -(self.Main.Size.Y.Offset/2))
 	self.Main.BackgroundColor3 = self.Theme.Background
 	self.Main.BackgroundTransparency = 0.05
