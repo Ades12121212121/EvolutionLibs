@@ -545,4 +545,40 @@ function Elements.Label(parent, text, config)
     return label
 end
 
+function Elements.Button(parent, text, callback, config)
+    config = config or {}
+    local designs = getDesigns()
+    if not designs then
+        warn("[EvolutionLibs] No se pudo cargar el módulo Designs para Button")
+        return nil
+    end
+
+    local theme = designs.Themes[config.Theme or "Dark"]
+    local button = Instance.new("TextButton")
+    button.Name = "Button"
+    button.Size = UDim2.new(1, -20, 0, config.Height or 40)
+    button.BackgroundColor3 = theme.Primary
+    button.BorderSizePixel = 0
+    button.Text = text
+    button.TextColor3 = theme.Text
+    button.Font = config.Bold and Enum.Font.GothamBold or Enum.Font.Gotham
+    button.TextSize = config.TextSize or 16
+    button.Parent = parent
+
+    -- Esquinas redondeadas
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, theme.BorderRadius or 6)
+    corner.Parent = button
+
+    -- Efecto hover
+    Elements.Utils.AddHoverEffect(button, theme, "Glow")
+
+    -- Callback
+    if callback then
+        button.MouseButton1Click:Connect(callback)
+    end
+
+    return button
+end
+
 return Elements
