@@ -45,7 +45,7 @@ local SIDEBAR_WIDTH = 180
 function Window.new(config)
 	local self = setmetatable({}, Window)
 	self.Config = config or {}
-	self.Theme = Designs.Themes[self.Config.Theme or "Dark"] or Designs.Themes.Dark
+	self.Theme = getDesigns().Themes[self.Config.Theme or "Dark"] or getDesigns().Themes.Dark
 	self.Tabs = {}
 	self.CurrentTab = nil
 	self.SidebarCollapsed = false
