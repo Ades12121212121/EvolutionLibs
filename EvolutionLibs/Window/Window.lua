@@ -170,7 +170,10 @@ function Window.new(config)
 	local function updateDrag(input)
 		if self.IsDragging then
 			local delta = input.Position - self.DragStart
-			local newPos = UDim2.new(0, self.DragOrigin.X + delta.X, 0, self.DragOrigin.Y + delta.Y)
+			local newPos = UDim2.new(
+				0, self.DragOrigin.X.Offset + delta.X,
+				0, self.DragOrigin.Y.Offset + delta.Y
+			)
 			self.Main.Position = getUtils().clampPosition(newPos, self.ScreenGui.AbsoluteSize)
 		end
 	end
