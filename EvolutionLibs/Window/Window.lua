@@ -29,17 +29,6 @@ local function getElements()
     if not Elements then Elements = loadstring(game:HttpGet(BASE_URL .. "Elements/Elements.lua"))() end
     return Elements
 end
--- NO cargar Tab ni Toast aquí
--- Si se necesita Tab o Toast, usar:
--- local Tab = loadstring(game:HttpGet(BASE_URL .. "Tabs/Tab.lua"))()
--- local Toast = loadstring(game:HttpGet(BASE_URL .. "Toast/Toast.lua"))()
--- dentro de la función que lo requiera
--- NO cargar Sidebar aquí
--- Si se necesita Sidebar, usar:
--- local Sidebar = loadstring(game:HttpGet(BASE_URL .. "Sidebar/Sidebar.lua"))()
--- dentro de la función que lo requiera
-local Toast = require(script.Parent.Toast)
-local Tab = require(script.Parent.Tab)
 
 local Window = {}
 Window.__index = Window
