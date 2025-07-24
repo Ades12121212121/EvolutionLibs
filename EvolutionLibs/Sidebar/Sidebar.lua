@@ -66,28 +66,6 @@ function Sidebar.Create(parent, config)
     title.TextXAlignment = Enum.TextXAlignment.Left
     title.Parent = header
     
-    -- Botón de colapso
-    local collapseBtn
-    if collapsible then
-        collapseBtn = Instance.new("TextButton")
-        collapseBtn.Name = "CollapseButton"
-        collapseBtn.Size = UDim2.new(0, 40, 0, 40)
-        collapseBtn.Position = UDim2.new(1, -50, 0.5, -20)
-        collapseBtn.BackgroundColor3 = theme.Background
-        collapseBtn.BorderSizePixel = 0
-        collapseBtn.Text = "<<"
-        collapseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        collapseBtn.Font = Enum.Font.GothamBold
-        collapseBtn.TextSize = 14
-        collapseBtn.Parent = header
-        
-        local collapseBtnCorner = Instance.new("UICorner")
-        collapseBtnCorner.CornerRadius = UDim.new(0, 20)
-        collapseBtnCorner.Parent = collapseBtn
-        
-        Designs.Effects.CreateRipple(collapseBtn, theme.Hover, 0.3)
-    end
-    
     -- Container de navegación
     local navigation = Instance.new("ScrollingFrame")
     navigation.Name = "Navigation"
@@ -165,12 +143,36 @@ function Sidebar.Create(parent, config)
         titleTween:Play()
     end
     
-    if collapseBtn then
+    -- Botón de colapso (movido después de la función toggleCollapse)
+    local collapseBtn
+    if collapsible then
+        collapseBtn = Instance.new("TextButton")
+        collapseBtn.Name = "CollapseButton"
+        collapseBtn.Size = UDim2.new(0, 40, 0, 40)
+        collapseBtn.Position = UDim2.new(1, -50, 0.5, -20)
+        collapseBtn.BackgroundColor3 = theme.Background
+        collapseBtn.BorderSizePixel = 0
+        collapseBtn.Text = "<<"
+        collapseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        collapseBtn.Font = Enum.Font.GothamBold
+        collapseBtn.TextSize = 14
+        collapseBtn.Parent = header
+        
+        local collapseBtnCorner = Instance.new("UICorner")
+        collapseBtnCorner.CornerRadius = UDim.new(0, 20)
+        collapseBtnCorner.Parent = collapseBtn
+        
+        Designs.Effects.CreateRipple(collapseBtn, theme.Hover, 0.3)
+        
+        -- Conectar el evento después de crear el botón
         collapseBtn.MouseButton1Click:Connect(toggleCollapse)
     end
     
-    -- API del sidebar
-    sidebar.AddItem = function(text, icon, callback)
+    -- Crear API del sidebar
+    local api = {}
+    
+    -- Función AddItem
+    api.AddItem = function(text, icon, callback)
         local item = Instance.new("Frame")
         item.Name = "NavigationItem"
         item.Size = UDim2.new(1, 0, 0, 45)
@@ -288,7 +290,8 @@ function Sidebar.Create(parent, config)
         return item
     end
     
-    sidebar.AddSeparator = function(text)
+    -- Función AddSeparator
+    api.AddSeparator = function(text)
         local separator = Instance.new("Frame")
         separator.Name = "Separator"
         separator.Size = UDim2.new(1, 0, 0, text and 35 or 15)
@@ -321,7 +324,8 @@ function Sidebar.Create(parent, config)
         return separator
     end
     
-    sidebar.SetActiveItem = function(itemText)
+    -- Función SetActiveItem
+    api.SetActiveItem = function(itemText)
         for _, child in pairs(navigation:GetChildren()) do
             if child:IsA("Frame") and child.Name == "NavigationItem" then
                 local label = child:FindFirstChild("Label")
@@ -350,24 +354,21 @@ function Sidebar.Create(parent, config)
         end
     end
     
-    sidebar.Toggle = function()
+    -- Función Toggle
+    api.Toggle = function()
         if collapsible then
             toggleCollapse()
         end
     end
     
-    sidebar.IsCollapsed = function()
+    -- Función IsCollapsed
+    api.IsCollapsed = function()
         return collapsed
     end
     
-    local api = {
-        Main = sidebar,
-        AddItem = sidebar.AddItem,
-        AddSeparator = sidebar.AddSeparator,
-        SetActiveItem = sidebar.SetActiveItem,
-        Toggle = sidebar.Toggle,
-        IsCollapsed = sidebar.IsCollapsed
-    }
+    -- Agregar referencia al Frame principal
+    api.Main = sidebar
+    
     return api, navigation
 end
 
@@ -412,8 +413,11 @@ function Sidebar.CreateMini(parent, config)
     iconPadding.PaddingBottom = UDim.new(0, 15)
     iconPadding.Parent = iconContainer
     
-    -- API del mini sidebar
-    miniSidebar.AddIcon = function(icon, tooltip, callback)
+    -- Crear API del mini sidebar
+    local miniApi = {}
+    
+    -- Función AddIcon
+    miniApi.AddIcon = function(icon, tooltip, callback)
         local iconBtn = Instance.new("TextButton")
         iconBtn.Name = "IconButton"
         iconBtn.Size = UDim2.new(0, 40, 0, 40)
@@ -429,6 +433,9 @@ function Sidebar.CreateMini(parent, config)
         local iconCorner = Instance.new("UICorner")
         iconCorner.CornerRadius = UDim.new(0, 20)
         iconCorner.Parent = iconBtn
+        
+        -- Variable para el tooltip
+        local currentTooltip = nil
         
         -- Efectos de hover
         iconBtn.MouseEnter:Connect(function()
@@ -485,23 +492,8 @@ function Sidebar.CreateMini(parent, config)
                 tooltipTween:Play()
                 textTween:Play()
                 
-                iconBtn.MouseLeave:Connect(function()
-                    local fadeOut = game:GetService("TweenService"):Create(tooltipFrame,
-                        TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-                        {BackgroundTransparency = 1}
-                    )
-                    local textFadeOut = game:GetService("TweenService"):Create(tooltipText,
-                        TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-                        {TextTransparency = 1}
-                    )
-                    
-                    fadeOut:Play()
-                    textFadeOut:Play()
-                    
-                    fadeOut.Completed:Connect(function()
-                        tooltipFrame:Destroy()
-                    end)
-                end)
+                -- Guardar referencia del tooltip
+                currentTooltip = tooltipFrame
             end
         end)
         
@@ -515,6 +507,30 @@ function Sidebar.CreateMini(parent, config)
                 }
             )
             tween:Play()
+            
+            -- Ocultar tooltip si existe
+            if currentTooltip then
+                local tooltipFrame = currentTooltip
+                local tooltipText = tooltipFrame:FindFirstChild("TextLabel")
+                
+                local fadeOut = game:GetService("TweenService"):Create(tooltipFrame,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                    {BackgroundTransparency = 1}
+                )
+                local textFadeOut = game:GetService("TweenService"):Create(tooltipText,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                    {TextTransparency = 1}
+                )
+                
+                fadeOut:Play()
+                textFadeOut:Play()
+                
+                fadeOut.Completed:Connect(function()
+                    tooltipFrame:Destroy()
+                end)
+                
+                currentTooltip = nil
+            end
         end)
         
         iconBtn.MouseButton1Click:Connect(function()
@@ -525,7 +541,8 @@ function Sidebar.CreateMini(parent, config)
         return iconBtn
     end
     
-    miniSidebar.SetActiveIcon = function(iconText)
+    -- Función SetActiveIcon
+    miniApi.SetActiveIcon = function(iconText)
         for _, child in pairs(iconContainer:GetChildren()) do
             if child:IsA("TextButton") then
                 if child.Text == iconText then
@@ -539,9 +556,13 @@ function Sidebar.CreateMini(parent, config)
         end
     end
     
-    return miniSidebar
+    -- Agregar referencia al Frame principal
+    miniApi.Main = miniSidebar
+    
+    return miniApi
 end
 
+-- Alias para compatibilidad
 Sidebar.new = Sidebar.Create
 
 return Sidebar
