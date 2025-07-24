@@ -129,7 +129,7 @@ function Sidebar.Create(parent, config)
         
         -- Animar sidebar
         local sidebarTween = game:GetService("TweenService"):Create(sidebar,
-            TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+            TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
             {Size = UDim2.new(0, targetWidth, 1, 0)}
         )
         sidebarTween:Play()
@@ -360,6 +360,7 @@ function Sidebar.Create(parent, config)
         return collapsed
     end
     
+    -- (1) Asegura que Sidebar.Create retorna la API, nunca el Frame directo
     local api = {}
     api.Main = sidebar
     api.AddItem = sidebar.AddItem
@@ -432,7 +433,7 @@ function Sidebar.CreateMini(parent, config)
         -- Efectos de hover
         iconBtn.MouseEnter:Connect(function()
             local tween = game:GetService("TweenService"):Create(iconBtn,
-                TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+                TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
                 {
                     BackgroundColor3 = theme.Primary,
                     TextColor3 = Color3.fromRGB(255, 255, 255),
