@@ -1,14 +1,14 @@
 -- Elements/Elements.lua - Componentes UI básicos
 
 local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLibs/main/EvolutionLibs/"
-local Utils, Designs
+_G.EvoLibsCache = _G.EvoLibsCache or {}
 local function getUtils()
-    if not Utils then Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))() end
-    return Utils
+    if not _G.EvoLibsCache.Utils then _G.EvoLibsCache.Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))() end
+    return _G.EvoLibsCache.Utils
 end
 local function getDesigns()
-    if not Designs then Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))() end
-    return Designs
+    if not _G.EvoLibsCache.Designs then _G.EvoLibsCache.Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))() end
+    return _G.EvoLibsCache.Designs
 end
 
 local Elements = {}
