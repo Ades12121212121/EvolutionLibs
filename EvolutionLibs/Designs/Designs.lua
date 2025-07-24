@@ -49,9 +49,9 @@ Designs.Themes = {
         Focus = Color3.fromRGB(147, 197, 253),
         
         -- Gradientes
-        PrimaryGradient = Utils.createGradient(Color3.fromRGB(88, 166, 255), Color3.fromRGB(168, 85, 247), 45),
-        AccentGradient = Utils.createGradient(Color3.fromRGB(255, 107, 129), Color3.fromRGB(255, 154, 0), 90),
-        BackgroundGradient = Utils.createGradient(Color3.fromRGB(18, 18, 24), Color3.fromRGB(28, 28, 36), 180),
+        PrimaryGradient = getUtils().createGradient(Color3.fromRGB(88, 166, 255), Color3.fromRGB(168, 85, 247), 45),
+        AccentGradient = getUtils().createGradient(Color3.fromRGB(255, 107, 129), Color3.fromRGB(255, 154, 0), 90),
+        BackgroundGradient = getUtils().createGradient(Color3.fromRGB(18, 18, 24), Color3.fromRGB(28, 28, 36), 180),
         
         -- Efectos
         Shadow = Color3.fromRGB(0, 0, 0),
@@ -93,9 +93,9 @@ Designs.Themes = {
         Disabled = Color3.fromRGB(148, 163, 184),
         Focus = Color3.fromRGB(96, 165, 250),
         
-        PrimaryGradient = Utils.createGradient(Color3.fromRGB(59, 130, 246), Color3.fromRGB(147, 51, 234), 45),
-        AccentGradient = Utils.createGradient(Color3.fromRGB(236, 72, 153), Color3.fromRGB(251, 146, 60), 90),
-        BackgroundGradient = Utils.createGradient(Color3.fromRGB(255, 255, 255), Color3.fromRGB(248, 250, 252), 180),
+        PrimaryGradient = getUtils().createGradient(Color3.fromRGB(59, 130, 246), Color3.fromRGB(147, 51, 234), 45),
+        AccentGradient = getUtils().createGradient(Color3.fromRGB(236, 72, 153), Color3.fromRGB(251, 146, 60), 90),
+        BackgroundGradient = getUtils().createGradient(Color3.fromRGB(255, 255, 255), Color3.fromRGB(248, 250, 252), 180),
         
         Shadow = Color3.fromRGB(15, 23, 42),
         Glow = Color3.fromRGB(59, 130, 246),
@@ -134,9 +134,9 @@ Designs.Themes = {
         Disabled = Color3.fromRGB(64, 64, 80),
         Focus = Color3.fromRGB(255, 255, 255),
         
-        PrimaryGradient = Utils.createGradient(Color3.fromRGB(0, 255, 255), Color3.fromRGB(255, 0, 255), 45),
-        AccentGradient = Utils.createGradient(Color3.fromRGB(255, 0, 128), Color3.fromRGB(255, 20, 147), 90),
-        BackgroundGradient = Utils.createGradient(Color3.fromRGB(10, 10, 15), Color3.fromRGB(20, 20, 30), 180),
+        PrimaryGradient = getUtils().createGradient(Color3.fromRGB(0, 255, 255), Color3.fromRGB(255, 0, 255), 45),
+        AccentGradient = getUtils().createGradient(Color3.fromRGB(255, 0, 128), Color3.fromRGB(255, 20, 147), 90),
+        BackgroundGradient = getUtils().createGradient(Color3.fromRGB(10, 10, 15), Color3.fromRGB(20, 20, 30), 180),
         
         Shadow = Color3.fromRGB(0, 0, 0),
         Glow = Color3.fromRGB(0, 255, 255),
@@ -175,9 +175,9 @@ Designs.Themes = {
         Disabled = Color3.fromRGB(120, 144, 156),
         Focus = Color3.fromRGB(174, 213, 129),
         
-        PrimaryGradient = Utils.createGradient(Color3.fromRGB(76, 175, 80), Color3.fromRGB(139, 195, 74), 45),
-        AccentGradient = Utils.createGradient(Color3.fromRGB(255, 193, 7), Color3.fromRGB(255, 235, 59), 90),
-        BackgroundGradient = Utils.createGradient(Color3.fromRGB(20, 30, 25), Color3.fromRGB(35, 50, 40), 180),
+        PrimaryGradient = getUtils().createGradient(Color3.fromRGB(76, 175, 80), Color3.fromRGB(139, 195, 74), 45),
+        AccentGradient = getUtils().createGradient(Color3.fromRGB(255, 193, 7), Color3.fromRGB(255, 235, 59), 90),
+        BackgroundGradient = getUtils().createGradient(Color3.fromRGB(20, 30, 25), Color3.fromRGB(35, 50, 40), 180),
         
         Shadow = Color3.fromRGB(0, 20, 10),
         Glow = Color3.fromRGB(76, 175, 80),
@@ -216,9 +216,9 @@ Designs.Themes = {
         Disabled = Color3.fromRGB(120, 144, 156),
         Focus = Color3.fromRGB(129, 212, 250),
         
-        PrimaryGradient = Utils.createGradient(Color3.fromRGB(3, 169, 244), Color3.fromRGB(0, 188, 212), 45),
-        AccentGradient = Utils.createGradient(Color3.fromRGB(0, 188, 212), Color3.fromRGB(38, 166, 154), 90),
-        BackgroundGradient = Utils.createGradient(Color3.fromRGB(15, 25, 35), Color3.fromRGB(25, 40, 55), 180),
+        PrimaryGradient = getUtils().createGradient(Color3.fromRGB(3, 169, 244), Color3.fromRGB(0, 188, 212), 45),
+        AccentGradient = getUtils().createGradient(Color3.fromRGB(0, 188, 212), Color3.fromRGB(38, 166, 154), 90),
+        BackgroundGradient = getUtils().createGradient(Color3.fromRGB(15, 25, 35), Color3.fromRGB(25, 40, 55), 180),
         
         Shadow = Color3.fromRGB(0, 10, 20),
         Glow = Color3.fromRGB(3, 169, 244),
@@ -407,7 +407,7 @@ Designs.Simple = {
     -- Generar tema personalizado
     CustomTheme = function(baseColor, name)
         name = name or "Custom"
-        local palette = Utils.generateColorPalette(baseColor, 8)
+        local palette = getUtils().generateColorPalette(baseColor, 8)
         
         local customTheme = {
             Background = palette[1],
@@ -429,9 +429,9 @@ Designs.Simple = {
             Disabled = Color3.fromRGB(120, 120, 120),
             Focus = palette[7],
             
-            PrimaryGradient = Utils.createGradient(baseColor, palette[8], 45),
-            AccentGradient = Utils.createGradient(palette[4], palette[6], 90),
-            BackgroundGradient = Utils.createGradient(palette[1], palette[2], 180),
+            PrimaryGradient = getUtils().createGradient(baseColor, palette[8], 45),
+            AccentGradient = getUtils().createGradient(palette[4], palette[6], 90),
+            BackgroundGradient = getUtils().createGradient(palette[1], palette[2], 180),
             
             Shadow = Color3.fromRGB(0, 0, 0),
             Glow = baseColor,
