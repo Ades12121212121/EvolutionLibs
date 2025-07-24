@@ -5,6 +5,8 @@ local RunService = game:GetService("RunService")
 
 local Utils = {}
 
+local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLibs/main/EvolutionLibs/"
+
 -- Easing Functions
 function Utils.easeInQuad(t)
 	return t * t

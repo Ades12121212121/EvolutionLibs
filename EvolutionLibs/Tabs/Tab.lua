@@ -1,9 +1,10 @@
 -- Tab.lua - Tab management for EvolutionLibs GUI
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
-local Utils = require(script.Parent.Utils)
-local Designs = require(script.Parent.Designs)
-local Elements = require(script.Parent.Elements)
+local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLibs/main/EvolutionLibs/"
+local Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))()
+local Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))()
+local Elements = loadstring(game:HttpGet(BASE_URL .. "Elements/Elements.lua"))()
 
 local Tab = {}
 Tab.__index = Tab

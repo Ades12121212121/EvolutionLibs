@@ -1,6 +1,7 @@
 -- Designs/Designs.lua - Sistema de temas, efectos y componentes
 
-local Utils = require(script.Parent.Parent.Utils.Utils)
+local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLibs/main/EvolutionLibs/"
+local Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))()
 
 local Designs = {}
 

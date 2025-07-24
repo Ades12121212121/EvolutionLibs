@@ -1,7 +1,8 @@
 -- Elements/Elements.lua - Componentes UI básicos
 
-local Utils = require(script.Parent.Parent.Utils.Utils)
-local Designs = require(script.Parent.Parent.Designs.Designs)
+local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLibs/main/EvolutionLibs/"
+local Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))()
+local Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))()
 
 local Elements = {}
 

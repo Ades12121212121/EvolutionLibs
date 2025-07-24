@@ -1,12 +1,14 @@
--- EvolutionLibs Loader principal (modular, rutas locales)
+-- EvolutionLibs Loader principal (compatible con loadstring y GitHub)
 
-local Utils = require(script.Parent.Utils.Utils)
-local Designs = require(script.Parent.Designs.Designs)
-local Sidebar = require(script.Parent.Sidebar.Sidebar)
-local Toast = require(script.Parent.Toast.Toast)
-local Window = require(script.Parent.Window.Window)
-local Tab = require(script.Parent.Tabs.Tab)
-local Elements = require(script.Parent.Elements.Elements)
+local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLibs/main/EvolutionLibs/"
+
+local Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))()
+local Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))()
+local Sidebar = loadstring(game:HttpGet(BASE_URL .. "Sidebar/Sidebar.lua"))()
+local Toast = loadstring(game:HttpGet(BASE_URL .. "Toast/Toast.lua"))()
+local Window = loadstring(game:HttpGet(BASE_URL .. "Window/Window.lua"))()
+local Tab = loadstring(game:HttpGet(BASE_URL .. "Tabs/Tab.lua"))()
+local Elements = loadstring(game:HttpGet(BASE_URL .. "Elements/Elements.lua"))()
 
 local EvolutionLibs = {
 	Utils = Utils,
