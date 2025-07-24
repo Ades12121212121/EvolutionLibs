@@ -271,7 +271,7 @@ function Window.new(config)
 end
 
 function Window:CreateTab(name, icon)
-	local tab = Tab.new(self, name, icon)
+	local tab = getTab().new(self, name, icon)
 	table.insert(self.Tabs, tab)
 	if #self.Tabs == 1 then
 		self:SelectTab(tab)
@@ -285,7 +285,7 @@ function Window:SelectTab(tab)
 	end
 	self.CurrentTab = tab
 	tab:SetActive(true)
-	getUtils().tweenProperty(self.Content, "BackgroundTransparency", 0.1, 0.3)
+	getUtils().tweenProperty(self.Content, "BackgroundTransparency", 0a.1, 0.3)
 end
 
 function Window:Show()
