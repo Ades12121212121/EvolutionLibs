@@ -53,9 +53,12 @@ function Tab.new(window, name, icon)
 	self.Button.Font = Enum.Font.Gotham
 	self.Button.TextSize = 14
 	self.Button.TextXAlignment = Enum.TextXAlignment.Left
-	self.Button.TextScaled = true
-	self.Button.ZIndex = 5
 	self.Button.Parent = window.SidebarTabList
+
+	-- Padding para el texto
+	local textPadding = Instance.new("UIPadding")
+	textPadding.PaddingLeft = icon and UDim.new(0, ICON_SIZE + 15) or UDim.new(0, 10)
+	textPadding.Parent = self.Button
 
 	local buttonCorner = Instance.new("UICorner")
 	buttonCorner.CornerRadius = UDim.new(0, 6)
@@ -72,8 +75,6 @@ function Tab.new(window, name, icon)
 		iconLabel.ImageColor3 = designs.Themes.Dark.TextSecondary
 		iconLabel.ZIndex = 6
 		iconLabel.Parent = self.Button
-		self.Button.TextXAlignment = Enum.TextXAlignment.Left
-		self.Button.TextPadding = UDim.new(0, ICON_SIZE + 15)
 	end
 
 	-- Ripple Effect
