@@ -279,7 +279,9 @@ function Window.new(config)
 	local success, sidebarResult = pcall(function()
 		return getSidebar().Create(self.Main, {
 			Theme = self.Theme,
-			Title = self.Config.Title or "Menu"
+			Title = self.Config.Title or "Menu",
+			Position = UDim2.new(0, 0, 0, TITLEBAR_HEIGHT),
+			Size = UDim2.new(0, SIDEBAR_WIDTH, 1, -TITLEBAR_HEIGHT)
 		})
 	end)
 	
