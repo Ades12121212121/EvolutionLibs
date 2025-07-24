@@ -4,30 +4,30 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local BASE_URL = "https://raw.githubusercontent.com/Ades12121212121/EvolutionLibs/main/EvolutionLibs/"
-local Utils, Designs, Sidebar, Toast, Tab, Elements
+_G.EvoLibsCache = _G.EvoLibsCache or {}
 local function getUtils()
-    if not Utils then Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))() end
-    return Utils
+    if not _G.EvoLibsCache.Utils then _G.EvoLibsCache.Utils = loadstring(game:HttpGet(BASE_URL .. "Utils/Utils.lua"))() end
+    return _G.EvoLibsCache.Utils
 end
 local function getDesigns()
-    if not Designs then Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))() end
-    return Designs
+    if not _G.EvoLibsCache.Designs then _G.EvoLibsCache.Designs = loadstring(game:HttpGet(BASE_URL .. "Designs/Designs.lua"))() end
+    return _G.EvoLibsCache.Designs
 end
 local function getSidebar()
-    if not Sidebar then Sidebar = loadstring(game:HttpGet(BASE_URL .. "Sidebar/Sidebar.lua"))() end
-    return Sidebar
+    if not _G.EvoLibsCache.Sidebar then _G.EvoLibsCache.Sidebar = loadstring(game:HttpGet(BASE_URL .. "Sidebar/Sidebar.lua"))() end
+    return _G.EvoLibsCache.Sidebar
 end
 local function getToast()
-    if not Toast then Toast = loadstring(game:HttpGet(BASE_URL .. "Toast/Toast.lua"))() end
-    return Toast
+    if not _G.EvoLibsCache.Toast then _G.EvoLibsCache.Toast = loadstring(game:HttpGet(BASE_URL .. "Toast/Toast.lua"))() end
+    return _G.EvoLibsCache.Toast
 end
 local function getTab()
-    if not Tab then Tab = loadstring(game:HttpGet(BASE_URL .. "Tabs/Tab.lua"))() end
-    return Tab
+    if not _G.EvoLibsCache.Tab then _G.EvoLibsCache.Tab = loadstring(game:HttpGet(BASE_URL .. "Tabs/Tab.lua"))() end
+    return _G.EvoLibsCache.Tab
 end
 local function getElements()
-    if not Elements then Elements = loadstring(game:HttpGet(BASE_URL .. "Elements/Elements.lua"))() end
-    return Elements
+    if not _G.EvoLibsCache.Elements then _G.EvoLibsCache.Elements = loadstring(game:HttpGet(BASE_URL .. "Elements/Elements.lua"))() end
+    return _G.EvoLibsCache.Elements
 end
 
 local Window = {}
