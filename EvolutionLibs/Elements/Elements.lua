@@ -608,7 +608,6 @@ function Elements.Toggle(parent, text, default, callback, config)
     end
 
     local theme = designs.Themes[config.Theme or "Dark"]
-    
     -- Contenedor principal
     local container = Instance.new("Frame")
     container.Name = "Toggle"
@@ -675,14 +674,10 @@ function Elements.Toggle(parent, text, default, callback, config)
     local function updateVisuals()
         local utils = getUtils()
         if not utils then return end
-
-        -- Animar el círculo
         local circleTween = game:GetService("TweenService"):Create(circle, tweenInfo, {
             Position = UDim2.new(enabled and 1 or 0, enabled and -18 or 2, 0.5, -8)
         })
         circleTween:Play()
-
-        -- Animar el color del switch
         local switchTween = game:GetService("TweenService"):Create(switch, tweenInfo, {
             BackgroundColor3 = enabled and theme.Primary or theme.Secondary
         })
@@ -697,10 +692,8 @@ function Elements.Toggle(parent, text, default, callback, config)
     button.Text = ""
     button.Parent = container
 
-    -- Efecto hover en el contenedor
     Elements.Utils.AddHoverEffect(container, theme, "Subtle")
 
-    -- Conectar eventos
     button.MouseButton1Click:Connect(function()
         enabled = not enabled
         updateVisuals()
@@ -709,7 +702,17 @@ function Elements.Toggle(parent, text, default, callback, config)
         end
     end)
 
-    return container
+    -- API para control externo
+    local api = container
+    api.Value = enabled
+    function api:SetValue(val)
+        enabled = val and true or false
+        updateVisuals()
+        if callback then
+            callback(enabled)
+        end
+    end
+    return api
 end
 
 return Elements
