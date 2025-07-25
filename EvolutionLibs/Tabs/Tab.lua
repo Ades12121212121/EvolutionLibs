@@ -213,6 +213,19 @@ function Tab.new(window, name, icon)
 		end
 	end)
 
+	local menuButton = Instance.new("ImageButton")
+	menuButton.Name = "MenuButton"
+	menuButton.Size = UDim2.new(0, 28, 0, 28)
+	menuButton.Position = UDim2.new(0, 8, 0, 8)
+	menuButton.BackgroundTransparency = 1
+	menuButton.Image = "rbxassetid://6031094678" -- Icono de 3 líneas
+	menuButton.Parent = self.Container
+	menuButton.MouseButton1Click:Connect(function()
+		if window and window.Sidebar and window.Sidebar.Main then
+			window.Sidebar.Main.Visible = not window.Sidebar.Main.Visible
+		end
+	end)
+
 	return self
 end
 
