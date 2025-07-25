@@ -214,11 +214,16 @@ local EvolutionLibs = {
 
     Notify = function(text, type, duration, parent)
         local toastModule = getToast()
-        if not toastModule or not toastModule.show then
-            warn("[EvolutionLibs] No se pudo acceder al módulo Toast")
-            return nil
+        if toastModule and toastModule.show then
+            return toastModule.show(text, type, duration, parent)
+        else
+            local StarterGui = game:GetService("StarterGui")
+            StarterGui:SetCore("SendNotification", {
+                Title = type or "Info",
+                Text = text or "",
+                Duration = duration or 2
+            })
         end
-        return toastModule.show(text, type, duration, parent)
     end,
 
     -- Utilidades
