@@ -277,12 +277,50 @@ function Window.new(config)
 
 	-- Sidebar
 	local success, sidebarResult = pcall(function()
-		return getSidebar().Create(self.Main, {
-			Theme = self.Theme,
-			Title = self.Config.Title or "Menu",
-			Position = UDim2.new(0, 0, 0, TITLEBAR_HEIGHT),
-			Size = UDim2.new(0, SIDEBAR_WIDTH, 1, -TITLEBAR_HEIGHT)
-		})
+		-- Crear contenedor del Sidebar
+		local sidebarContainer = Instance.new("Frame")
+		sidebarContainer.Name = "SidebarContainer"
+		sidebarContainer.Size = UDim2.new(0, SIDEBAR_WIDTH, 1, -TITLEBAR_HEIGHT)
+		sidebarContainer.Position = UDim2.new(0, 0, 0, TITLEBAR_HEIGHT)
+		sidebarContainer.BackgroundColor3 = self.Theme.Surface
+		sidebarContainer.BorderSizePixel = 0
+		sidebarContainer.Parent = self.Main
+
+		-- Lista de tabs
+		self.SidebarTabList = Instance.new("ScrollingFrame")
+		self.SidebarTabList.Name = "TabList"
+		self.SidebarTabList.Size = UDim2.new(1, -10, 1, -20)
+		self.SidebarTabList.Position = UDim2.new(0, 5, 0, 10)
+		self.SidebarTabList.BackgroundTransparency = 1
+		self.SidebarTabList.BorderSizePixel = 0
+		self.SidebarTabList.ScrollBarThickness = 2
+		self.SidebarTabList.ScrollBarImageColor3 = self.Theme.Secondary
+		self.SidebarTabList.Parent = sidebarContainer
+
+		-- Layout para los tabs
+		local listLayout = Instance.new("UIListLayout")
+		listLayout.Padding = UDim.new(0, 5)
+		listLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+		listLayout.Parent = self.SidebarTabList
+
+		-- Padding para la lista
+		local listPadding = Instance.new("UIPadding")
+		listPadding.PaddingTop = UDim.new(0, 5)
+		listPadding.PaddingBottom = UDim.new(0, 5)
+		listPadding.Parent = self.SidebarTabList
+
+		-- Ajustar tamaño del canvas automáticamente
+		listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+			self.SidebarTabList.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 10)
+		end)
+
+		return {
+			Main = sidebarContainer,
+			TabList = self.SidebarTabList,
+			Destroy = function()
+				sidebarContainer:Destroy()
+			end
+		}
 	end)
 	
 	if success and sidebarResult then
@@ -292,6 +330,7 @@ function Window.new(config)
 		-- Crea un Sidebar básico como fallback
 		self.Sidebar = {
 			Main = Instance.new("Frame"),
+			TabList = Instance.new("ScrollingFrame"),
 			Destroy = function() end
 		}
 		self.Sidebar.Main.Name = "SidebarFallback"
@@ -300,6 +339,20 @@ function Window.new(config)
 		self.Sidebar.Main.BackgroundColor3 = self.Theme.Surface
 		self.Sidebar.Main.BorderSizePixel = 0
 		self.Sidebar.Main.Parent = self.Main
+
+		self.Sidebar.TabList.Name = "TabListFallback"
+		self.Sidebar.TabList.Size = UDim2.new(1, -10, 1, -20)
+		self.Sidebar.TabList.Position = UDim2.new(0, 5, 0, 10)
+		self.Sidebar.TabList.BackgroundTransparency = 1
+		self.Sidebar.TabList.BorderSizePixel = 0
+		self.Sidebar.TabList.ScrollBarThickness = 2
+		self.Sidebar.TabList.ScrollBarImageColor3 = self.Theme.Secondary
+		self.Sidebar.TabList.Parent = self.Sidebar.Main
+
+		local listLayout = Instance.new("UIListLayout")
+		listLayout.Padding = UDim.new(0, 5)
+		listLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+		listLayout.Parent = self.Sidebar.TabList
 	end
 
 	-- Content Area
