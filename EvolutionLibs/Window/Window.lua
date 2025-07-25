@@ -358,13 +358,49 @@ function Window.new(config)
 	-- Content Area
 	self.Content = Instance.new("Frame")
 	self.Content.Name = "Content"
-	self.Content.Size = UDim2.new(1, -SIDEBAR_WIDTH, 1, -TITLEBAR_HEIGHT)
-	self.Content.Position = UDim2.new(0, SIDEBAR_WIDTH, 0, TITLEBAR_HEIGHT)
+	if self.Config.NoSidebar then
+		self.Content.Size = UDim2.new(1, 0, 1, -TITLEBAR_HEIGHT)
+		self.Content.Position = UDim2.new(0, 0, 0, TITLEBAR_HEIGHT)
+	else
+		self.Content.Size = UDim2.new(1, -SIDEBAR_WIDTH, 1, -TITLEBAR_HEIGHT)
+		self.Content.Position = UDim2.new(0, SIDEBAR_WIDTH, 0, TITLEBAR_HEIGHT)
+	end
 	self.Content.BackgroundColor3 = self.Theme.Background
 	self.Content.BackgroundTransparency = 0.1
 	self.Content.BorderSizePixel = 0
 	self.Content.ClipsDescendants = true
 	self.Content.Parent = self.Main
+
+	-- Agregar ScrollingFrame para el contenido
+	local contentScroll = Instance.new("ScrollingFrame")
+	contentScroll.Name = "ContentScroll"
+	contentScroll.Size = UDim2.new(1, -20, 1, -20)
+	contentScroll.Position = UDim2.new(0, 10, 0, 10)
+	contentScroll.BackgroundTransparency = 1
+	contentScroll.BorderSizePixel = 0
+	contentScroll.ScrollBarThickness = 2
+	contentScroll.ScrollBarImageColor3 = self.Theme.Secondary
+	contentScroll.Parent = self.Content
+
+	-- Layout para el contenido
+	local contentLayout = Instance.new("UIListLayout")
+	contentLayout.Padding = UDim.new(0, 10)
+	contentLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	contentLayout.Parent = contentScroll
+
+	-- Padding para el contenido
+	local contentPadding = Instance.new("UIPadding")
+	contentPadding.PaddingTop = UDim.new(0, 10)
+	contentPadding.PaddingBottom = UDim.new(0, 10)
+	contentPadding.Parent = contentScroll
+
+	-- Ajustar tamaño del canvas automáticamente
+	contentLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+		contentScroll.CanvasSize = UDim2.new(0, 0, 0, contentLayout.AbsoluteContentSize.Y + 20)
+	end)
+
+	-- Reemplazar self.Content con el ScrollingFrame
+	self.Content = contentScroll
 
 	-- Almacena las conexiones para limpiarlas después
 	table.insert(self.Connections, UserInputService.InputBegan:Connect(function(input)
