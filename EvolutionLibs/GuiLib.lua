@@ -29,7 +29,7 @@ local function loadModule(moduleName, path, required)
             error("[EvolutionLibs] No se pudo cargar el módulo requerido: " .. moduleName)
         end
         return nil
-    end
+	end
 end
 
 -- Carga de módulos principales (requeridos)
@@ -37,8 +37,9 @@ local Utils = loadModule("Utils", "Utils/Utils.lua", true)
 local Designs = loadModule("Designs", "Designs/Designs.lua", true)
 local Window = loadModule("Window", "Window/Window.lua", true)
 local Elements = loadModule("Elements", "Elements/Elements.lua", true)
+local Hotkeys = loadModule("Hotkeys", "hotkeys/instakey.lua", true)
 
-if not (Utils and Designs and Window and Elements) then
+if not (Utils and Designs and Window and Elements and Hotkeys) then
     error("[EvolutionLibs] No se pudieron cargar los módulos principales")
 end
 
@@ -62,6 +63,7 @@ local EvolutionLibs = {
     Designs = Designs,
     Window = Window,
     Elements = Elements,
+    Hotkeys = Hotkeys,
 
     -- Módulos con carga lazy y verificación
     Sidebar = setmetatable({}, {
