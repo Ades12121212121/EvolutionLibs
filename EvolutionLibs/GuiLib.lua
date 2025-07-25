@@ -56,6 +56,13 @@ local function getTab()
     return loadModule("Tab", "Tabs/Tab.lua")
 end
 
+local function getSidebarEnabled()
+    local ok, v = pcall(function() return getgenv and getgenv().sidebar_enabled end)
+    if ok and v ~= nil then return v end
+    if _G.sidebar_enabled ~= nil then return _G.sidebar_enabled end
+    return true -- por defecto sidebar activado
+end
+
 -- API principal
 local EvolutionLibs = {
     Version = "2.0.0",
@@ -135,6 +142,10 @@ local EvolutionLibs = {
         if not Window then
             warn("[EvolutionLibs] No se pudo acceder al módulo Window")
             return nil
+        end
+        config = config or {}
+        if config.NoSidebar == nil then
+            config.NoSidebar = not getSidebarEnabled()
         end
         return Window.new(config)
     end,
