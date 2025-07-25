@@ -40,6 +40,8 @@ local ANIMATION_DURATION = 0.5
 local SHADOW_OFFSET = 10
 local TITLEBAR_HEIGHT = 40
 local SIDEBAR_WIDTH = 180
+local MIN_SIDEBAR_WIDTH = 80
+local MAX_SIDEBAR_WIDTH = 400
 
 -- Constructor
 function Window.new(config)
@@ -283,6 +285,7 @@ function Window.new(config)
 			sidebarContainer.Name = "SidebarContainer"
 			sidebarContainer.Size = UDim2.new(0, SIDEBAR_WIDTH, 1, -TITLEBAR_HEIGHT)
 			sidebarContainer.Position = UDim2.new(0, 0, 0, TITLEBAR_HEIGHT)
+			self.SidebarWidth = SIDEBAR_WIDTH
 			sidebarContainer.BackgroundColor3 = self.Theme.Surface
 			sidebarContainer.BorderSizePixel = 0
 			sidebarContainer.Parent = self.Main
@@ -314,6 +317,50 @@ function Window.new(config)
 			listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 				self.SidebarTabList.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 10)
 			end)
+
+            -- Handle para redimensionar el sidebar
+            local resizeSidebarHandle = Instance.new("Frame")
+            resizeSidebarHandle.Name = "SidebarResizeHandle"
+            resizeSidebarHandle.Size = UDim2.new(0, 6, 1, 0)
+            resizeSidebarHandle.Position = UDim2.new(1, -3, 0, 0)
+            resizeSidebarHandle.BackgroundColor3 = self.Theme.Primary
+            resizeSidebarHandle.BackgroundTransparency = 0.2
+            resizeSidebarHandle.BorderSizePixel = 0
+            resizeSidebarHandle.Parent = sidebarContainer
+            resizeSidebarHandle.ZIndex = 100
+            local handleCorner = Instance.new("UICorner")
+            handleCorner.CornerRadius = UDim.new(0, 3)
+            handleCorner.Parent = resizeSidebarHandle
+
+            local resizingSidebar = false
+            local sidebarStartX = 0
+            local sidebarStartWidth = SIDEBAR_WIDTH
+
+            resizeSidebarHandle.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    resizingSidebar = true
+                    sidebarStartX = input.Position.X
+                    sidebarStartWidth = sidebarContainer.Size.X.Offset
+                end
+            end)
+
+            resizeSidebarHandle.InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    resizingSidebar = false
+                end
+            end)
+
+            resizeSidebarHandle.InputChanged:Connect(function(input)
+                if resizingSidebar and input.UserInputType == Enum.UserInputType.MouseMovement then
+                    local delta = input.Position.X - sidebarStartX
+                    local newWidth = math.clamp(sidebarStartWidth + delta, MIN_SIDEBAR_WIDTH, MAX_SIDEBAR_WIDTH)
+                    sidebarContainer.Size = UDim2.new(0, newWidth, 1, -TITLEBAR_HEIGHT)
+                    self.SidebarWidth = newWidth
+                    -- Ajustar el área de contenido
+                    self.Content.Size = UDim2.new(1, -newWidth, 1, -TITLEBAR_HEIGHT)
+                    self.Content.Position = UDim2.new(0, newWidth, 0, TITLEBAR_HEIGHT)
+                end
+            end)
 
 			return {
 				Main = sidebarContainer,
@@ -364,8 +411,8 @@ function Window.new(config)
 		self.Content.Size = UDim2.new(1, 0, 1, -TITLEBAR_HEIGHT)
 		self.Content.Position = UDim2.new(0, 0, 0, TITLEBAR_HEIGHT)
 	else
-		self.Content.Size = UDim2.new(1, -SIDEBAR_WIDTH, 1, -TITLEBAR_HEIGHT)
-		self.Content.Position = UDim2.new(0, SIDEBAR_WIDTH, 0, TITLEBAR_HEIGHT)
+		self.Content.Size = UDim2.new(1, -self.SidebarWidth, 1, -TITLEBAR_HEIGHT)
+		self.Content.Position = UDim2.new(0, self.SidebarWidth, 0, TITLEBAR_HEIGHT)
 	end
 	self.Content.BackgroundColor3 = self.Theme.Background
 	self.Content.BackgroundTransparency = 0.1

@@ -534,7 +534,8 @@ function Elements.Label(parent, text, config)
     local theme = designs.Themes[config.Theme or "Dark"]
     local label = Instance.new("TextLabel")
     label.Name = "Label"
-    label.Size = UDim2.new(1, -20, 0, config.TextSize or 20)
+    label.Size = config.Size or UDim2.new(1, -20, 0, config.TextSize or 20)
+    if config.Position then label.Position = config.Position end
     label.BackgroundTransparency = 1
     label.Text = text
     label.TextColor3 = config.Color or theme.Text
@@ -556,7 +557,8 @@ function Elements.Button(parent, text, callback, config)
     local theme = designs.Themes[config.Theme or "Dark"]
     local button = Instance.new("TextButton")
     button.Name = "Button"
-    button.Size = UDim2.new(1, -20, 0, config.Height or 40)
+    button.Size = config.Size or UDim2.new(1, -20, 0, config.Height or 40)
+    if config.Position then button.Position = config.Position end
     button.BackgroundColor3 = theme.Primary
     button.BorderSizePixel = 0
     button.Text = text
@@ -594,7 +596,8 @@ function Elements.Toggle(parent, text, default, callback, config)
     -- Contenedor principal
     local container = Instance.new("Frame")
     container.Name = "Toggle"
-    container.Size = UDim2.new(1, -20, 0, config.Height or 40)
+    container.Size = config.Size or UDim2.new(1, -20, 0, config.Height or 40)
+    if config.Position then container.Position = config.Position end
     container.BackgroundColor3 = theme.Surface
     container.BackgroundTransparency = 0.5
     container.BorderSizePixel = 0
