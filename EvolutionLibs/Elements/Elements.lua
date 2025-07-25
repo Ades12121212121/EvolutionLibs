@@ -670,6 +670,7 @@ function Elements.Toggle(parent, text, default, callback, config)
     -- Estado y lógica
     local enabled = default
     local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local changedEvent = Instance.new("BindableEvent")
 
     local function updateVisuals()
         local utils = getUtils()
@@ -694,24 +695,39 @@ function Elements.Toggle(parent, text, default, callback, config)
 
     Elements.Utils.AddHoverEffect(container, theme, "Subtle")
 
-    button.MouseButton1Click:Connect(function()
-        enabled = not enabled
-        updateVisuals()
-        if callback then
-            callback(enabled)
+    local function setValue(val, fireCallback)
+        local newVal = val and true or false
+        if enabled ~= newVal then
+            enabled = newVal
+            updateVisuals()
+            changedEvent:Fire(enabled)
+            if callback and fireCallback ~= false then
+                callback(enabled)
+            end
         end
+    end
+
+    button.MouseButton1Click:Connect(function()
+        setValue(not enabled, true)
     end)
 
     -- API para control externo
-    local api = container
-    api.Value = enabled
-    function api:SetValue(val)
-        enabled = val and true or false
-        updateVisuals()
-        if callback then
-            callback(enabled)
-        end
-    end
+    local api = {
+        Instance = container,
+        Value = enabled,
+        SetValue = function(self, val)
+            setValue(val, true)
+            self.Value = enabled
+        end,
+        GetValue = function(self)
+            return enabled
+        end,
+        Changed = changedEvent.Event
+    }
+    -- Mantener Value actualizado
+    changedEvent.Event:Connect(function(val)
+        api.Value = val
+    end)
     return api
 end
 
