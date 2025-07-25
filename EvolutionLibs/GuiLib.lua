@@ -56,6 +56,14 @@ local function getTab()
     return loadModule("Tab", "Tabs/Tab.lua")
 end
 
+local function getKeyCode(keyName)
+    if not keyName or keyName == "None" then return nil end
+    if Enum.KeyCode[keyName] then
+        return Enum.KeyCode[keyName]
+    end
+    return nil
+end
+
 -- API principal
 local EvolutionLibs = {
     Version = "2.0.0",
@@ -206,7 +214,7 @@ local EvolutionLibs = {
 
     Notify = function(text, type, duration, parent)
         local toastModule = getToast()
-        if not toastModule then
+        if not toastModule or not toastModule.show then
             warn("[EvolutionLibs] No se pudo acceder al módulo Toast")
             return nil
         end
